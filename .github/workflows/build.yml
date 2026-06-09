@@ -21,21 +21,11 @@ jobs:
         with:
           flutter-version: '3.22.2'
 
-      - name: Decode Keystore File
+      - name: Inject Keystore and Build
         run: |
+          # Re-create the key file in the correct location for the compiler
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/release-keystore.jks
-
-      - name: Configure Signing and Build Release
-        run: |
-          # Inject signing credentials securely into the build configurations
-          cat << 'SIGN' >> android/key.properties
-          storePassword=mysecretpassword
-          keyPassword=mysecretpassword
-          keyAlias=upload
-          storeFile=release-keystore.jks
-          SIGN
           
-          # Run the official production compilation pipeline
           flutter clean
           flutter pub get
           flutter build appbundle --release
