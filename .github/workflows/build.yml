@@ -21,21 +21,26 @@ jobs:
         with:
           flutter-version: '3.22.2'
 
-      - name: Fix Configurations and Build
+      - name: Decode Keystore File
         run: |
-          # 1. Update the package name
-          sed -i 's/com.example.moderntemplate.flutter_modern_template/com.savemyaccount.verificationapp/g' android/app/build.gradle.kts
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/release-keystore.jks
+
+      - name: Configure Signing and Build Release
+        run: |
+          # Inject signing credentials securely into the build configurations
+          cat << 'SIGN' >> android/key.properties
+          storePassword=mysecretpassword
+          keyPassword=mysecretpassword
+          keyAlias=upload
+          storeFile=release-keystore.jks
+          SIGN
           
-          # 2. Fix the strict version function syntax safely
-          sed -i 's/flutter.versionCode\([^\(]\|$\)/flutter.versionCode()/g' android/app/build.gradle.kts
-          sed -i 's/flutter.versionName\([^\(]\|$\)/flutter.versionName()/g' android/app/build.gradle.kts
-          
-          # 3. Clean and explicitly build standard release bundle
+          # Run the official production compilation pipeline
           flutter clean
           flutter pub get
           flutter build appbundle --release
           
-      - name: Save Uploadable Artifact
+      - name: Save Signed Release Artifact
         uses: actions/upload-artifact@v4
         with:
           name: play-store-bundle
