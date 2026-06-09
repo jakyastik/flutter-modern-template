@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.savemyaccount.verificationapp"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -17,7 +17,6 @@ android {
         jvmTarget = "17"
     }
 
-    // 1. MUST BE DECLARED FIRST
     signingConfigs {
         create("release") {
             storeFile = file("release-keystore.jks")
@@ -27,7 +26,6 @@ android {
         }
     }
 
-    // 2. READS SIGNING CONFIGS FROM ABOVE
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")

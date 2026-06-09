@@ -1,16 +1,11 @@
-name: flutter_modern_template
-description: "A simple app to clear dormancy status."
+name: verificationapp
+description: "A minimal app to clear dormancy status."
 publish_to: 'none'
 version: 1.0.0+1
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
-  flutter: '>=3.22.0'
 
 dependencies:
   flutter:
-    sdk: flutter
-
-dev_dependencies:
-  flutter_test:
     sdk: flutter
