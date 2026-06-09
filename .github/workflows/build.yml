@@ -21,20 +21,10 @@ jobs:
         with:
           flutter-version: '3.22.2'
 
-      - name: Clean Cache and Build Release
+      - name: Compile Pristine Production App Bundle
         run: |
-          # 1. Inject the signing key
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/release-keystore.jks
-          
-          # 2. Hard clear all build caches to destroy the v1 embedding memory residue
-          flutter clean
-          rm -rf android/.gradle
-          rm -rf android/app/build
-          
-          # 3. Force fetch pristine dependencies
           flutter pub get
-          
-          # 4. Compile directly to production
           flutter build appbundle --release
           
       - name: Save Signed Release Artifact
