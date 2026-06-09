@@ -21,22 +21,22 @@ jobs:
         with:
           flutter-version: '3.22.2'
 
-      - name: Update Package ID, Fix Syntax, and Build
+      - name: Fix Configurations and Build
         run: |
           # 1. Update the package name
           sed -i 's/com.example.moderntemplate.flutter_modern_template/com.savemyaccount.verificationapp/g' android/app/build.gradle.kts
           
-          # 2. Fix the flutter.versionCode and versionName syntax errors
-          sed -i 's/flutter.versionCode/flutter.versionCode()/g' android/app/build.gradle.kts
-          sed -i 's/flutter.versionName/flutter.versionName()/g' android/app/build.gradle.kts
+          # 2. Fix the strict version function syntax safely
+          sed -i 's/flutter.versionCode\([^\(]\|$\)/flutter.versionCode()/g' android/app/build.gradle.kts
+          sed -i 's/flutter.versionName\([^\(]\|$\)/flutter.versionName()/g' android/app/build.gradle.kts
           
-          # 3. Run clean compilation
+          # 3. Clean and explicitly build standard release bundle
           flutter clean
           flutter pub get
-          flutter build appbundle --debug
+          flutter build appbundle --release
           
       - name: Save Uploadable Artifact
         uses: actions/upload-artifact@v4
         with:
           name: play-store-bundle
-          path: build/app/outputs/bundle/debug/app-debug.aab
+          path: build/app/outputs/bundle/release/app-release.aab
