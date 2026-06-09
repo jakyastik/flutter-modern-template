@@ -21,9 +21,9 @@ jobs:
         with:
           flutter-version: '3.22.2'
 
-      - name: Inject Keystore and Build Release Bundle
+      - name: Inject Keystore and Build Release
         run: |
-          # Write the keystore file directly into the app module directory
+          # Drop the keystore straight into the app runtime environment
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/release-keystore.jks
           
           flutter clean
