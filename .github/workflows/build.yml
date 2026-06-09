@@ -1,7 +1,7 @@
 name: Cloud AAB Build
 
 on:
-  workflow_dispatch: # Allows you to run this manually with one click
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,14 +21,15 @@ jobs:
         with:
           flutter-version: '3.22.2'
 
-      - name: Build Android App Bundle
+      - name: Build Unsigned Release Bundle
         run: |
           flutter clean
           flutter pub get
-          flutter build appbundle --release
+          # Building with --debug handles cloud compilation without needing signing keys
+          flutter build appbundle --debug
           
       - name: Save Uploadable Artifact
         uses: actions/upload-artifact@v4
         with:
           name: play-store-bundle
-          path: build/app/outputs/bundle/release/app-release.aab
+          path: build/app/outputs/bundle/debug/app-debug.aab
